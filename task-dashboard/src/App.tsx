@@ -1,14 +1,12 @@
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.css';
+import { DashboardRender } from './presenters/dashboardPresenter';
 
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background text-primary">
-      <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground animate-in zoom-in">
-        Hello with Theme 🎨
-      </button>
+    <div className="min-h-screen bg-background text-primary p-4">
+      <h1 className="text-2xl font-bold mb-4">Task Dashboard</h1>
+      <DashboardRender />
     </div>
   );
 }
