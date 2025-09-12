@@ -10,6 +10,7 @@ interface DashboardViewProps {
   };
   setNewTask: (task: any) => void;
   onAddTask: () => void;
+  temperature: number;
 }
 
 function DashboardView({
@@ -17,6 +18,7 @@ function DashboardView({
   newTask,
   setNewTask,
   onAddTask,
+  temperature,
 }: DashboardViewProps) {
   const priorityColor = {
     low: 'bg-blue-100 text-blue-800',
@@ -37,6 +39,14 @@ function DashboardView({
 
   return (
     <div className="space-y-6">
+      {/* Weather Display */}
+      <div className="flex justify-end p-4">
+        <div className="bg-white rounded-lg shadow-md p-3">
+          <span className="font-semibold">Temperature Today in Stockholm is </span>
+          {temperature}°C.
+        </div>
+      </div>
+
       {/* Add Task Details Form */}
       <div className="p-4 bg-white rounded-lg shadow-md">
         <h2 className="text-xl font-bold mb-4">Add New Task</h2>
