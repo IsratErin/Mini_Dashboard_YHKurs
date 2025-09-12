@@ -5,13 +5,16 @@ interface DashboardViewProps {
   newTask: {
     title: string;
     category: string;
+    completed: boolean;
     priority: 'low' | 'medium' | 'high';
     description?: string;
+    
   };
   setNewTask: (task: any) => void;
   onAddTask: () => void;
   temperature: number;
   location: string;
+  onToggleComplete: (id: number) => void;
 }
 
 function DashboardView({
@@ -21,6 +24,7 @@ function DashboardView({
   onAddTask,
   temperature,
   location,
+  onToggleComplete,
 }: DashboardViewProps) {
   const priorityColor = {
     low: 'bg-blue-100 text-blue-800',
@@ -105,9 +109,17 @@ function DashboardView({
             key={task.id}
             className="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
           >
-            <h3 className="text-xl font-bold mb-2 text-gray-800">
-              {task.title}
-            </h3>
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl font-bold mb-2 text-gray-800">
+                {task.title}
+              </h3>
+              <input
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => onToggleComplete(task.id)}
+                className="h-5 w-5 text-blue-600"
+              />
+            </div>
             <div className="space-y-2">
               <div
                 className={`inline-block px-2 py-1 rounded-full text-sm ${priorityColor[task.priority]}`}
@@ -123,6 +135,8 @@ function DashboardView({
                   {task.description}
                 </p>
               )}
+              
+              
             </div>
           </div>
         ))}

@@ -45,6 +45,19 @@ class TaskStore {
   getCityName(): string {
     return this.cityName;
   }
+
+  toggleTaskCompletion(id: number, callback: (completed: boolean) => void) {
+    const selectedTask = this.tasks.find(task => task.id === id);
+    if (selectedTask) {
+      selectedTask.completed = !selectedTask.completed;
+      if (selectedTask.completed) {
+        console.log(`Task "${selectedTask.title}" has been completed!`);
+      }else {
+        console.log(`Task "${selectedTask.title}" is yet uncompleted!`);
+      }
+      callback(selectedTask.completed);
+    }
+  }
 }
 
 export default TaskStore;
