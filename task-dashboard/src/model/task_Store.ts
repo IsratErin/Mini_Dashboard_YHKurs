@@ -1,11 +1,11 @@
 import Task from './task';
-import {fetchCityWeatherData} from '../api/weatherApiData';
+import { fetchCurrentLocationWeather } from '../api/weatherApiData';
 
 class TaskStore {
   tasks: Task[] = [];
   cityWeather: number = 0;
+  cityName: string = '';
 
-  
   addTask(
     id: number,
     title: string,
@@ -25,24 +25,26 @@ class TaskStore {
     this.tasks.push(task);
   }
 
-  setWeatherData(data: number) {
-    this.cityWeather = data;  
+  setWeatherData(temp: number, cityName: string) {
+    this.cityWeather = temp;
+    this.cityName = cityName;
   }
 
-  async updateWeatherData(city: string) {
+  async updateWeatherData() {
     try {
-      const weatherData = await fetchCityWeatherData(city);
-      this.setWeatherData(weatherData);
+      const weatherData = await fetchCurrentLocationWeather();
+      this.setWeatherData(weatherData.temp, weatherData.city);
     } catch (error) {
       console.error('Failed to fetch weather data:', error);
     }
   }
 
-  getWeatherData(): number {
+  getTempData(): number {
     return this.cityWeather;
   }
-  
+  getCityName(): string {
+    return this.cityName;
+  }
 }
-
 
 export default TaskStore;

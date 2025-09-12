@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardView from '../views/dashboardView.tsx';
 import TaskStore from '../model/task_Store';
 
@@ -15,18 +15,19 @@ export function DashboardRender() {
   const [taskStore] = useState(() => new TaskStore());
   const [tasks, setTasks] = useState(taskStore.tasks);
   const [temperature, setTemperature] = useState(0);
+  const [city, setCity] = useState('');
   const [newTask, setNewTask] = useState({
     title: '',
     category: '',
     priority: 'low' as 'low' | 'medium' | 'high',
     description: '',
   });
-  
 
   useEffect(() => {
     const fetchWeather = async () => {
-      await taskStore.updateWeatherData('Stockholm');
-      setTemperature(taskStore.getWeatherData());
+      await taskStore.updateWeatherData();
+      setTemperature(taskStore.getTempData());
+      setCity(taskStore.getCityName());
     };
     fetchWeather();
   }, [taskStore]);
@@ -63,6 +64,7 @@ export function DashboardRender() {
       setNewTask={setNewTask}
       onAddTask={handleAddTask}
       temperature={temperature}
+      location={city}
     />
   );
 }
