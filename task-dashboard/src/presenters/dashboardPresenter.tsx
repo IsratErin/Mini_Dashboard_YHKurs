@@ -19,6 +19,7 @@ export function DashboardRender() {
   const [newTask, setNewTask] = useState({
     title: '',
     category: '',
+    completed: false,
     priority: 'low' as 'low' | 'medium' | 'high',
     description: '',
   });
@@ -52,8 +53,16 @@ export function DashboardRender() {
     setNewTask({
       title: '',
       category: '',
+      completed: false,
       priority: 'low' as 'low' | 'medium' | 'high',
       description: '',
+    });
+  };
+
+  const handleToggleComplete = (id: number) => {
+    taskStore.toggleTaskCompletion(id, (completed) => {
+      console.log(`Task ${id} completion status: ${completed}`);
+      setTasks([...taskStore.tasks]);
     });
   };
 
@@ -65,6 +74,7 @@ export function DashboardRender() {
       onAddTask={handleAddTask}
       temperature={temperature}
       location={city}
+      onToggleComplete={handleToggleComplete}
     />
   );
 }
