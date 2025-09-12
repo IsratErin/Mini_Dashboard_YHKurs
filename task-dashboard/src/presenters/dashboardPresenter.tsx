@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import DashboardView from '../views/dashboar.tsx';
+import DashboardView from '../views/dashboardView.tsx';
 import TaskStore from '../model/task_Store';
 
 interface TaskProps {
