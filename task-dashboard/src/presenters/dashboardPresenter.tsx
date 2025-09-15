@@ -64,16 +64,55 @@ export function DashboardRender() {
     });
   };
 
+  const [editingTask, setEditingTask] = useState<number | null>(null);
+
+  const handleEditTask = (id: number) => {
+    const taskToEdit = tasks.find((task) => task.id === id);
+    if (taskToEdit) {
+      setEditingTask(id);
+      setNewTask({
+        title: taskToEdit.title,
+        category: taskToEdit.category,
+        completed: taskToEdit.completed,
+        priority: taskToEdit.priority,
+        description: taskToEdit.description || '',
+      });
+    }
+  };
+
+  const handleUpdateTask = () => {
+    if (editingTask && newTask.title && newTask.category) {
+      taskStore.editTask(
+        editingTask,
+        newTask.title,
+        newTask.priority,
+        newTask.category,
+        newTask.description
+      );
+      setTasks([...taskStore.tasks]);
+      setEditingTask(null);
+      setNewTask({
+        title: '',
+        category: '',
+        completed: false,
+        priority: 'low' as 'low' | 'medium' | 'high',
+        description: '',
+      });
+    }
+  };
+
   return (
     <DashboardView
       tasks={tasks}
       newTask={newTask}
       setNewTask={setNewTask}
-      onAddTask={handleAddTask}
+      onAddTask={editingTask ? handleUpdateTask : handleAddTask}
       temperature={temperature}
       location={city}
       onToggleComplete={handleToggleComplete}
       onDeleteTask={handleDeleteTask}
+      onEditTask={handleEditTask}
+      editingTaskId={editingTask}
     />
   );
 }

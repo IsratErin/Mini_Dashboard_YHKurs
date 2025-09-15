@@ -22,6 +22,8 @@ interface DashboardViewProps {
   location: string;
   onToggleComplete: (id: number) => void;
   onDeleteTask: (id: number) => void;
+  onEditTask: (id: number) => void;
+  editingTaskId: number | null;
 }
 
 function DashboardView({
@@ -33,6 +35,8 @@ function DashboardView({
   location,
   onToggleComplete,
   onDeleteTask,
+  onEditTask,
+  editingTaskId,
 }: DashboardViewProps) {
   const priorityColor = {
     low: 'bg-blue-100 text-blue-800',
@@ -63,9 +67,11 @@ function DashboardView({
         </div>
       </div>
 
-      {/* Add Task Details Form */}
+      {/* Update or Add Task Form Title */}
       <div className="p-4 bg-white rounded-lg shadow-md">
-        <h2 className="text-xl font-bold mb-4">Add New Task</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {editingTaskId ? 'Edit Task' : 'Add New Task'}
+        </h2>
         <div className="space-y-4">
           <input
             name="title"
@@ -104,8 +110,7 @@ function DashboardView({
             onClick={onAddTask}
             className="w-full bg-blue-500 text-black p-2 rounded hover:bg-blue-600"
           >
-            {' '}
-            Add Task
+            {editingTaskId ? 'Update Task' : 'Add Task'}
           </button>
         </div>
       </div>
@@ -121,19 +126,26 @@ function DashboardView({
               <h3 className="text-xl font-bold mb-2 text-gray-800">
                 {task.title}
               </h3>
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => onToggleComplete(task.id)}
-                className="h-5 w-5 text-blue-600"
-              />
-              <button
-                onClick={() => onDeleteTask(task.id)}
-                className="ml-4 text-red-600 hover:text-red-800"
-              >
-                {' '}
-                Delete{' '}
-              </button>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => onToggleComplete(task.id)}
+                  className="h-5 w-5 text-blue-600"
+                />
+                <button
+                  onClick={() => onEditTask(task.id)}
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => onDeleteTask(task.id)}
+                  className="text-red-600 hover:text-red-800"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
             <div></div>
             <div className="space-y-2">
@@ -151,6 +163,10 @@ function DashboardView({
                   {task.description}
                 </p>
               )}
+              <p className="text-gray-500 text-sm italic">
+                <span className="font-semibold">Created:</span>{' '}
+                {task.createdAt.toLocaleString()}
+              </p>
             </div>
           </div>
         ))}
