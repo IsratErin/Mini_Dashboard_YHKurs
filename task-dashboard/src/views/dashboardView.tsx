@@ -24,6 +24,8 @@ interface DashboardViewProps {
   onDeleteTask: (id: number) => void;
   onEditTask: (id: number) => void;
   editingTaskId: number | null;
+  filterStatus: 'all' | 'completed' | 'pending';
+  onFilterChange: (status: 'all' | 'completed' | 'pending') => void;
 }
 
 function DashboardView({
@@ -37,6 +39,8 @@ function DashboardView({
   onDeleteTask,
   onEditTask,
   editingTaskId,
+  filterStatus,
+  onFilterChange,
 }: DashboardViewProps) {
   const priorityColor = {
     low: 'bg-blue-100 text-blue-800',
@@ -65,6 +69,46 @@ function DashboardView({
             is {temperature}°C.
           </span>
         </div>
+      </div>
+
+      {/* Filter Section */}
+      <div className="flex justify-start gap-4 p-4">
+        <button
+          onClick={() => onFilterChange('all')}
+          className={`px-4 py-2 rounded ${
+            filterStatus === 'all'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+          }`}
+        >
+          All Tasks
+        </button>
+        <button
+          onClick={() => onFilterChange('completed')}
+          className={`px-4 py-2 rounded ${
+            filterStatus === 'completed'
+              ? 'bg-green-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+          }`}
+        >
+          Completed
+        </button>
+        <button
+          onClick={() => onFilterChange('pending')}
+          className={`px-4 py-2 rounded ${
+            filterStatus === 'pending'
+              ? 'bg-yellow-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+          }`}
+        >
+          Pending
+        </button>
+      </div>
+
+      {/* Task Count */}
+      <div className="px-4 text-sm text-gray-600">
+        Showing {tasks.length} {filterStatus === 'all' ? 'total' : filterStatus}{' '}
+        tasks
       </div>
 
       {/* Update or Add Task Form Title */}

@@ -14,6 +14,9 @@ export function DashboardRender() {
     priority: 'low' as 'low' | 'medium' | 'high',
     description: '',
   });
+  const [filterStatus, setFilterStatus] = useState<
+    'all' | 'completed' | 'pending'
+  >('all');
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -101,9 +104,24 @@ export function DashboardRender() {
     }
   };
 
+  const handleFilterChange = (status: 'all' | 'completed' | 'pending') => {
+    setFilterStatus(status);
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    switch (filterStatus) {
+      case 'completed':
+        return task.completed;
+      case 'pending':
+        return !task.completed;
+      default:
+        return true;
+    }
+  });
+
   return (
     <DashboardView
-      tasks={tasks}
+      tasks={filteredTasks}
       newTask={newTask}
       setNewTask={setNewTask}
       onAddTask={editingTask ? handleUpdateTask : handleAddTask}
@@ -113,6 +131,8 @@ export function DashboardRender() {
       onDeleteTask={handleDeleteTask}
       onEditTask={handleEditTask}
       editingTaskId={editingTask}
+      filterStatus={filterStatus}
+      onFilterChange={handleFilterChange}
     />
   );
 }
