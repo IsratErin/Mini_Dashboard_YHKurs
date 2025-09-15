@@ -2,14 +2,6 @@ import { useState, useEffect } from 'react';
 import DashboardView from '../views/dashboardView.tsx';
 import TaskStore from '../model/task_Store';
 
-interface TaskProps {
-  id: number;
-  title: string;
-  completed: boolean;
-  priority: 'low' | 'medium' | 'high';
-  category: string;
-  description?: string;
-}
 
 export function DashboardRender() {
   const [taskStore] = useState(() => new TaskStore());
@@ -46,7 +38,7 @@ export function DashboardRender() {
       false,
       newTask.priority,
       newTask.category,
-      newTask.description
+      newTask.description || '' // To ensure description is always a string
     );
     // Update tasks state to trigger re-render
     setTasks([...taskStore.tasks]);
@@ -55,7 +47,7 @@ export function DashboardRender() {
       category: '',
       completed: false,
       priority: 'low' as 'low' | 'medium' | 'high',
-      description: '',
+      description: '', 
     });
   };
 

@@ -7,10 +7,16 @@ interface DashboardViewProps {
     category: string;
     completed: boolean;
     priority: 'low' | 'medium' | 'high';
-    description?: string;
-    
+    description: string;
   };
-  setNewTask: (task: any) => void;
+
+  setNewTask: (newTask: {
+    title: string;
+    category: string;
+    completed: boolean;
+    priority: 'low' | 'medium' | 'high';
+    description: string;
+  }) => void;
   onAddTask: () => void;
   temperature: number;
   location: string;
@@ -135,8 +141,6 @@ function DashboardView({
                   {task.description}
                 </p>
               )}
-              
-              
             </div>
           </div>
         ))}
