@@ -21,6 +21,7 @@ interface DashboardViewProps {
   temperature: number;
   location: string;
   onToggleComplete: (id: number) => void;
+  onDeleteTask: (id: number) => void;
 }
 
 function DashboardView({
@@ -31,6 +32,7 @@ function DashboardView({
   temperature,
   location,
   onToggleComplete,
+  onDeleteTask,
 }: DashboardViewProps) {
   const priorityColor = {
     low: 'bg-blue-100 text-blue-800',
@@ -125,7 +127,15 @@ function DashboardView({
                 onChange={() => onToggleComplete(task.id)}
                 className="h-5 w-5 text-blue-600"
               />
+              <button
+                onClick={() => onDeleteTask(task.id)}
+                className="ml-4 text-red-600 hover:text-red-800"
+              >
+                {' '}
+                Delete{' '}
+              </button>
             </div>
+            <div></div>
             <div className="space-y-2">
               <div
                 className={`inline-block px-2 py-1 rounded-full text-sm ${priorityColor[task.priority]}`}
