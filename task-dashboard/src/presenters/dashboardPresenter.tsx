@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import DashboardView from '../views/dashboardView.tsx';
 import TaskStore from '../model/task_Store';
 
-
 export function DashboardRender() {
   const [taskStore] = useState(() => new TaskStore());
   const [tasks, setTasks] = useState(taskStore.tasks);
@@ -31,7 +30,7 @@ export function DashboardRender() {
       return;
     }
 
-    const id = Date.now();
+    const id = Math.floor(Math.random() * 10000) + 1; // Simple random ID generation
     taskStore.addTask(
       id,
       newTask.title,
@@ -47,8 +46,15 @@ export function DashboardRender() {
       category: '',
       completed: false,
       priority: 'low' as 'low' | 'medium' | 'high',
-      description: '', 
+      description: '',
     });
+  };
+
+  const handleDeleteTask = (id: number) => {
+    if (id) {
+      taskStore.deleteTask(id);
+      setTasks([...taskStore.tasks]);
+    }
   };
 
   const handleToggleComplete = (id: number) => {
@@ -67,6 +73,7 @@ export function DashboardRender() {
       temperature={temperature}
       location={city}
       onToggleComplete={handleToggleComplete}
+      onDeleteTask={handleDeleteTask}
     />
   );
 }

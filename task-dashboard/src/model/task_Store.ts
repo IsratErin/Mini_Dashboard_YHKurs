@@ -47,16 +47,20 @@ class TaskStore {
   }
 
   toggleTaskCompletion(id: number, callback: (completed: boolean) => void) {
-    const selectedTask = this.tasks.find(task => task.id === id);
+    const selectedTask = this.tasks.find((task) => task.id === id);
     if (selectedTask) {
       selectedTask.completed = !selectedTask.completed;
       if (selectedTask.completed) {
         console.log(`Task "${selectedTask.title}" has been completed!`);
-      }else {
+      } else {
         console.log(`Task "${selectedTask.title}" is yet uncompleted!`);
       }
       callback(selectedTask.completed);
     }
+  }
+
+  deleteTask(id: number) {
+    this.tasks = this.tasks.filter((task) => task.id !== id);
   }
 }
 
