@@ -28,6 +28,8 @@ interface DashboardViewProps {
   onFilterChange: (status: 'all' | 'completed' | 'pending') => void;
   sortOrder: 'none' | 'highToLow' | 'lowToHigh';
   onSortChange: (order: 'none' | 'highToLow' | 'lowToHigh') => void;
+  searchKeyword: string;
+  onSearch: (keyword: string) => void;
 }
 
 function DashboardView({
@@ -45,6 +47,8 @@ function DashboardView({
   onFilterChange,
   sortOrder,
   onSortChange,
+  searchKeyword,
+  onSearch,
 }: DashboardViewProps) {
   const priorityColor = {
     low: 'bg-blue-100 text-blue-800',
@@ -68,6 +72,10 @@ function DashboardView({
     >
   ) {
     onSortChange(e.target.value as 'none' | 'highToLow' | 'lowToHigh');
+  }
+
+  function doSearch(e: React.ChangeEvent<HTMLInputElement>) {
+    onSearch(e.target.value);
   }
 
   return (
@@ -131,6 +139,22 @@ function DashboardView({
             <option value="lowToHigh">Low to High</option>
           </select>
         </div>
+      </div>
+      {/* Search Task */}
+      <div className="flex justify-end p-4">
+        <input
+          type="text"
+          placeholder="Search tasks"
+          className="p-2 border rounded"
+          value={searchKeyword}
+          onChange={doSearch}
+        />
+        <button
+          onClick={()=>doSearch}
+          className="px-4 py-2 rounded bg-gray-200 text-gray-70 0"
+        >
+          Search
+        </button>
       </div>
 
       {/* Task Count */}

@@ -21,6 +21,7 @@ export function DashboardRender() {
     'all' | 'completed' | 'pending'
   >('all');
   const [sortOrder, setSortOrder] = useState<SortOrder>('none');
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -134,8 +135,19 @@ export function DashboardRender() {
   };
 
   //  filtered tasks that includes sorting
+  // Update the filtered tasks to include search
   const filteredAndSortedTasks = sortByPriority(
     tasks.filter((task) => {
+      // First apply search filter
+      const matchesSearch = 
+        searchKeyword === '' ||
+        task.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+        task.description?.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+        task.category.toLowerCase().includes(searchKeyword.toLowerCase());
+
+      if (!matchesSearch) return false;
+
+      // Then apply status filter
       switch (filterStatus) {
         case 'completed':
           return task.completed;
@@ -150,6 +162,10 @@ export function DashboardRender() {
   // handler for sorting
   const handleSortChange = (order: SortOrder) => {
     setSortOrder(order);
+  };
+
+  const handleSearch = (keyword: string) => {
+    setSearchKeyword(keyword);
   };
 
   return (
@@ -168,6 +184,8 @@ export function DashboardRender() {
       onFilterChange={handleFilterChange}
       sortOrder={sortOrder}
       onSortChange={handleSortChange}
+      searchKeyword={searchKeyword}
+      onSearch={handleSearch}
     />
   );
 }
