@@ -16,6 +16,7 @@ class TaskStore {
   ) {
     const task = new Task(
       id,
+
       title,
       completed,
       priority,

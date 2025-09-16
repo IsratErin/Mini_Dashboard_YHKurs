@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import DashboardView from '../views/dashboardView.tsx';
 import TaskStore from '../model/task_Store';
 
+// sort order type
+type SortOrder = 'none' | 'highToLow' | 'lowToHigh';
+
 export function DashboardRender() {
   const [taskStore] = useState(() => new TaskStore());
   const [tasks, setTasks] = useState(taskStore.tasks);
@@ -17,6 +20,7 @@ export function DashboardRender() {
   const [filterStatus, setFilterStatus] = useState<
     'all' | 'completed' | 'pending'
   >('all');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('none');
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -108,20 +112,49 @@ export function DashboardRender() {
     setFilterStatus(status);
   };
 
-  const filteredTasks = tasks.filter((task) => {
-    switch (filterStatus) {
-      case 'completed':
-        return task.completed;
-      case 'pending':
-        return !task.completed;
-      default:
-        return true;
-    }
-  });
+  // sorting function
+  const sortByPriority = (tasks: TaskStore['tasks']) => {
+    const priorityWeight = {
+      high: 3,
+      medium: 2,
+      low: 1,
+    };
+
+    const sortedTasks = [...tasks].sort((a, b) => {
+      if (sortOrder === 'highToLow') {
+        return priorityWeight[b.priority] - priorityWeight[a.priority];
+      }
+      if (sortOrder === 'lowToHigh') {
+        return priorityWeight[a.priority] - priorityWeight[b.priority];
+      }
+      return 0;
+    });
+
+    return sortedTasks;
+  };
+
+  //  filtered tasks that includes sorting
+  const filteredAndSortedTasks = sortByPriority(
+    tasks.filter((task) => {
+      switch (filterStatus) {
+        case 'completed':
+          return task.completed;
+        case 'pending':
+          return !task.completed;
+        default:
+          return true;
+      }
+    })
+  );
+
+  // handler for sorting
+  const handleSortChange = (order: SortOrder) => {
+    setSortOrder(order);
+  };
 
   return (
     <DashboardView
-      tasks={filteredTasks}
+      tasks={filteredAndSortedTasks}
       newTask={newTask}
       setNewTask={setNewTask}
       onAddTask={editingTask ? handleUpdateTask : handleAddTask}
@@ -133,6 +166,8 @@ export function DashboardRender() {
       editingTaskId={editingTask}
       filterStatus={filterStatus}
       onFilterChange={handleFilterChange}
+      sortOrder={sortOrder}
+      onSortChange={handleSortChange}
     />
   );
 }

@@ -26,6 +26,8 @@ interface DashboardViewProps {
   editingTaskId: number | null;
   filterStatus: 'all' | 'completed' | 'pending';
   onFilterChange: (status: 'all' | 'completed' | 'pending') => void;
+  sortOrder: 'none' | 'highToLow' | 'lowToHigh';
+  onSortChange: (order: 'none' | 'highToLow' | 'lowToHigh') => void;
 }
 
 function DashboardView({
@@ -41,6 +43,8 @@ function DashboardView({
   editingTaskId,
   filterStatus,
   onFilterChange,
+  sortOrder,
+  onSortChange,
 }: DashboardViewProps) {
   const priorityColor = {
     low: 'bg-blue-100 text-blue-800',
@@ -57,6 +61,13 @@ function DashboardView({
       ...newTask,
       [e.target.name]: e.target.value,
     });
+  }
+  function selectSortOrder(
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) {
+    onSortChange(e.target.value as 'none' | 'highToLow' | 'lowToHigh');
   }
 
   return (
@@ -103,6 +114,23 @@ function DashboardView({
         >
           Pending
         </button>
+      </div>
+
+      {/* Sort by order*/}
+      <div className="flex justify-between items-center px-4">
+        <div className="flex gap-4"></div>
+        <div className="flex items-center gap-2">
+          <span className="text-gray-700">Sort by priority:</span>
+          <select
+            value={sortOrder}
+            onChange={selectSortOrder}
+            className="p-2 border rounded bg-white"
+          >
+            <option value="none">None</option>
+            <option value="highToLow">High to Low</option>
+            <option value="lowToHigh">Low to High</option>
+          </select>
+        </div>
       </div>
 
       {/* Task Count */}
