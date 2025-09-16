@@ -16,6 +16,7 @@ class TaskStore {
   ) {
     const task = new Task(
       id,
+
       title,
       completed,
       priority,
@@ -61,6 +62,22 @@ class TaskStore {
 
   deleteTask(id: number) {
     this.tasks = this.tasks.filter((task) => task.id !== id);
+  }
+
+  editTask(
+    id: number,
+    title: string,
+    priority: 'low' | 'medium' | 'high',
+    category: string,
+    description: string
+  ) {
+    const taskToEdit = this.tasks.find((task) => task.id === id);
+    if (taskToEdit) {
+      taskToEdit.title = title;
+      taskToEdit.priority = priority;
+      taskToEdit.category = category;
+      taskToEdit.description = description;
+    }
   }
 }
 

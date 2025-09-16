@@ -22,6 +22,14 @@ interface DashboardViewProps {
   location: string;
   onToggleComplete: (id: number) => void;
   onDeleteTask: (id: number) => void;
+  onEditTask: (id: number) => void;
+  editingTaskId: number | null;
+  filterStatus: 'all' | 'completed' | 'pending';
+  onFilterChange: (status: 'all' | 'completed' | 'pending') => void;
+  sortOrder: 'none' | 'highToLow' | 'lowToHigh';
+  onSortChange: (order: 'none' | 'highToLow' | 'lowToHigh') => void;
+  searchKeyword: string;
+  onSearch: (keyword: string) => void;
 }
 
 function DashboardView({
@@ -33,6 +41,14 @@ function DashboardView({
   location,
   onToggleComplete,
   onDeleteTask,
+  onEditTask,
+  editingTaskId,
+  filterStatus,
+  onFilterChange,
+  sortOrder,
+  onSortChange,
+  searchKeyword,
+  onSearch,
 }: DashboardViewProps) {
   const priorityColor = {
     low: 'bg-blue-100 text-blue-800',
@@ -50,6 +66,17 @@ function DashboardView({
       [e.target.name]: e.target.value,
     });
   }
+  function selectSortOrder(
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) {
+    onSortChange(e.target.value as 'none' | 'highToLow' | 'lowToHigh');
+  }
+
+  function doSearch(e: React.ChangeEvent<HTMLInputElement>) {
+    onSearch(e.target.value);
+  }
 
   return (
     <div className="space-y-6">
@@ -63,9 +90,84 @@ function DashboardView({
         </div>
       </div>
 
-      {/* Add Task Details Form */}
+      {/* Filter Section */}
+      <div className="flex justify-start gap-4 p-4">
+        <button
+          onClick={() => onFilterChange('all')}
+          className={`px-4 py-2 rounded ${
+            filterStatus === 'all'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+          }`}
+        >
+          All Tasks
+        </button>
+        <button
+          onClick={() => onFilterChange('completed')}
+          className={`px-4 py-2 rounded ${
+            filterStatus === 'completed'
+              ? 'bg-green-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+          }`}
+        >
+          Completed
+        </button>
+        <button
+          onClick={() => onFilterChange('pending')}
+          className={`px-4 py-2 rounded ${
+            filterStatus === 'pending'
+              ? 'bg-yellow-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+          }`}
+        >
+          Pending
+        </button>
+      </div>
+
+      {/* Sort by order*/}
+      <div className="flex justify-between items-center px-4">
+        <div className="flex gap-4"></div>
+        <div className="flex items-center gap-2">
+          <span className="text-gray-700">Sort by priority:</span>
+          <select
+            value={sortOrder}
+            onChange={selectSortOrder}
+            className="p-2 border rounded bg-white"
+          >
+            <option value="none">None</option>
+            <option value="highToLow">High to Low</option>
+            <option value="lowToHigh">Low to High</option>
+          </select>
+        </div>
+      </div>
+      {/* Search Task */}
+      <div className="flex justify-end p-4">
+        <input
+          type="text"
+          placeholder="Search tasks"
+          className="p-2 border rounded"
+          value={searchKeyword}
+          onChange={doSearch}
+        />
+        <button
+          onClick={()=>doSearch}
+          className="px-4 py-2 rounded bg-gray-200 text-gray-70 0"
+        >
+          Search
+        </button>
+      </div>
+
+      {/* Task Count */}
+      <div className="px-4 text-sm text-gray-600">
+        Showing {tasks.length} {filterStatus === 'all' ? 'total' : filterStatus}{' '}
+        tasks
+      </div>
+
+      {/* Update or Add Task Form Title */}
       <div className="p-4 bg-white rounded-lg shadow-md">
-        <h2 className="text-xl font-bold mb-4">Add New Task</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {editingTaskId ? 'Edit Task' : 'Add New Task'}
+        </h2>
         <div className="space-y-4">
           <input
             name="title"
@@ -104,8 +206,7 @@ function DashboardView({
             onClick={onAddTask}
             className="w-full bg-blue-500 text-black p-2 rounded hover:bg-blue-600"
           >
-            {' '}
-            Add Task
+            {editingTaskId ? 'Update Task' : 'Add Task'}
           </button>
         </div>
       </div>
@@ -121,19 +222,26 @@ function DashboardView({
               <h3 className="text-xl font-bold mb-2 text-gray-800">
                 {task.title}
               </h3>
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => onToggleComplete(task.id)}
-                className="h-5 w-5 text-blue-600"
-              />
-              <button
-                onClick={() => onDeleteTask(task.id)}
-                className="ml-4 text-red-600 hover:text-red-800"
-              >
-                {' '}
-                Delete{' '}
-              </button>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => onToggleComplete(task.id)}
+                  className="h-5 w-5 text-blue-600"
+                />
+                <button
+                  onClick={() => onEditTask(task.id)}
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => onDeleteTask(task.id)}
+                  className="text-red-600 hover:text-red-800"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
             <div></div>
             <div className="space-y-2">
@@ -151,6 +259,10 @@ function DashboardView({
                   {task.description}
                 </p>
               )}
+              <p className="text-gray-500 text-sm italic">
+                <span className="font-semibold">Created:</span>{' '}
+                {task.createdAt.toLocaleString()}
+              </p>
             </div>
           </div>
         ))}
