@@ -30,6 +30,7 @@ interface DashboardViewProps {
   onSortChange: (order: 'none' | 'highToLow' | 'lowToHigh') => void;
   searchKeyword: string;
   onSearch: (keyword: string) => void;
+  quote: string;
 }
 
 function DashboardView({
@@ -49,6 +50,7 @@ function DashboardView({
   onSortChange,
   searchKeyword,
   onSearch,
+  quote,
 }: DashboardViewProps) {
   const priorityColor = {
     low: 'bg-blue-100 text-blue-800',
@@ -87,6 +89,13 @@ function DashboardView({
             Temperature now in <span className="text-red-600">{location}</span>{' '}
             is {temperature}°C.
           </span>
+        </div>
+      </div>
+      {/* Quote Display */}
+      <div className="flex justify-end p-4">
+        <div className="bg-white rounded-lg shadow-md p-3">
+          <span className="font-semibold">Quote of the Day:</span>
+          <p className="mt-2 text-gray-600">{quote}</p>
         </div>
       </div>
 
@@ -150,7 +159,7 @@ function DashboardView({
           onChange={doSearch}
         />
         <button
-          onClick={()=>doSearch}
+          onClick={() => doSearch}
           className="px-4 py-2 rounded bg-gray-200 text-gray-70 0"
         >
           Search

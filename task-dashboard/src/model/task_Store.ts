@@ -1,10 +1,12 @@
 import Task from './task';
 import { fetchCurrentLocationWeather } from '../api/weatherApiData';
+import { fetchDailyQuote } from '../api/quoteApiData';
 
 class TaskStore {
   tasks: Task[] = [];
   cityWeather: number = 0;
   cityName: string = '';
+  quote: string = '';
 
   addTask(
     id: number,
@@ -77,6 +79,18 @@ class TaskStore {
       taskToEdit.priority = priority;
       taskToEdit.category = category;
       taskToEdit.description = description;
+    }
+  }
+
+  async getQuote(): Promise<string> {
+    try {
+      const quoteData = await fetchDailyQuote();
+      console.log('quoteData:', quoteData);
+      this.quote = quoteData.quote;
+      return this.quote;
+    } catch (error) {
+      console.error('Failed to fetch daily quote:', error);
+      return '';
     }
   }
 }

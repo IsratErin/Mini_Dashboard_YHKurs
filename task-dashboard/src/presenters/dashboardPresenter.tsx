@@ -9,6 +9,7 @@ export function DashboardRender() {
   const [taskStore] = useState(() => new TaskStore());
   const [tasks, setTasks] = useState(taskStore.tasks);
   const [temperature, setTemperature] = useState(0);
+  const [quote, setQuote] = useState('');
   const [city, setCity] = useState('');
   const [newTask, setNewTask] = useState({
     title: '',
@@ -31,6 +32,15 @@ export function DashboardRender() {
     };
     fetchWeather();
   }, [taskStore]);
+
+  useEffect(() => {
+    const fetchQuote = async () => {
+      await taskStore.getQuote();
+      setQuote(taskStore.quote);
+    };
+    fetchQuote();
+  }, [taskStore]);
+
 
   const handleAddTask = () => {
     if (!newTask.title || !newTask.category) {
@@ -186,6 +196,7 @@ export function DashboardRender() {
       onSortChange={handleSortChange}
       searchKeyword={searchKeyword}
       onSearch={handleSearch}
+      quote= {quote}
     />
   );
 }
