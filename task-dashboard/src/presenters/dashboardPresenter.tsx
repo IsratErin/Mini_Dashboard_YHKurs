@@ -25,7 +25,7 @@ export function DashboardRender() {
   const [searchKeyword, setSearchKeyword] = useState('');
 
   useEffect(() => {
-    const fetchWeather = async () => {
+    const fetchWeather = async (): Promise<void> => {
       await taskStore.updateWeatherData();
       setTemperature(taskStore.getTempData());
       setCity(taskStore.getCityName());
@@ -34,15 +34,14 @@ export function DashboardRender() {
   }, [taskStore]);
 
   useEffect(() => {
-    const fetchQuote = async () => {
+    const fetchQuote = async (): Promise<void> => {
       await taskStore.getQuote();
       setQuote(taskStore.quote);
     };
     fetchQuote();
   }, [taskStore]);
 
-
-  const handleAddTask = () => {
+  const handleAddTask = (): void => {
     if (!newTask.title || !newTask.category) {
       alert('Please fill in at least the title and category');
       return;
@@ -68,14 +67,14 @@ export function DashboardRender() {
     });
   };
 
-  const handleDeleteTask = (id: number) => {
+  const handleDeleteTask = (id: number): void => {
     if (id) {
       taskStore.deleteTask(id);
       setTasks([...taskStore.tasks]);
     }
   };
 
-  const handleToggleComplete = (id: number) => {
+  const handleToggleComplete = (id: number): void => {
     taskStore.toggleTaskCompletion(id, (completed) => {
       console.log(`Task ${id} completion status: ${completed}`);
       setTasks([...taskStore.tasks]);
@@ -84,7 +83,7 @@ export function DashboardRender() {
 
   const [editingTask, setEditingTask] = useState<number | null>(null);
 
-  const handleEditTask = (id: number) => {
+  const handleEditTask = (id: number): void => {
     const taskToEdit = tasks.find((task) => task.id === id);
     if (taskToEdit) {
       setEditingTask(id);
@@ -98,7 +97,7 @@ export function DashboardRender() {
     }
   };
 
-  const handleUpdateTask = () => {
+  const handleUpdateTask = (): void => {
     if (editingTask && newTask.title && newTask.category) {
       taskStore.editTask(
         editingTask,
@@ -119,7 +118,9 @@ export function DashboardRender() {
     }
   };
 
-  const handleFilterChange = (status: 'all' | 'completed' | 'pending') => {
+  const handleFilterChange = (
+    status: 'all' | 'completed' | 'pending'
+  ): void => {
     setFilterStatus(status);
   };
 
@@ -149,7 +150,7 @@ export function DashboardRender() {
   const filteredAndSortedTasks = sortByPriority(
     tasks.filter((task) => {
       // First apply search filter
-      const matchesSearch = 
+      const matchesSearch =
         searchKeyword === '' ||
         task.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
         task.description?.toLowerCase().includes(searchKeyword.toLowerCase()) ||
@@ -170,11 +171,11 @@ export function DashboardRender() {
   );
 
   // handler for sorting
-  const handleSortChange = (order: SortOrder) => {
+  const handleSortChange = (order: SortOrder): void => {
     setSortOrder(order);
   };
 
-  const handleSearch = (keyword: string) => {
+  const handleSearch = (keyword: string): void => {
     setSearchKeyword(keyword);
   };
 
@@ -196,7 +197,7 @@ export function DashboardRender() {
       onSortChange={handleSortChange}
       searchKeyword={searchKeyword}
       onSearch={handleSearch}
-      quote= {quote}
+      quote={quote}
     />
   );
 }

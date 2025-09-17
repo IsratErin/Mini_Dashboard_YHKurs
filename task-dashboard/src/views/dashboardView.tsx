@@ -62,7 +62,7 @@ function DashboardView({
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
-  ) {
+  ): void {
     setNewTask({
       ...newTask,
       [e.target.name]: e.target.value,
@@ -72,11 +72,11 @@ function DashboardView({
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
-  ) {
+  ): void {
     onSortChange(e.target.value as 'none' | 'highToLow' | 'lowToHigh');
   }
 
-  function doSearch(e: React.ChangeEvent<HTMLInputElement>) {
+  function doSearch(e: React.ChangeEvent<HTMLInputElement>): void {
     onSearch(e.target.value);
   }
 

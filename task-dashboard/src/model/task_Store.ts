@@ -15,7 +15,7 @@ class TaskStore {
     priority: 'low' | 'medium' | 'high',
     category: string,
     description?: string
-  ) {
+  ): void {
     const task = new Task(
       id,
 
@@ -28,12 +28,12 @@ class TaskStore {
     this.tasks.push(task);
   }
 
-  setWeatherData(temp: number, cityName: string) {
+  setWeatherData(temp: number, cityName: string): void {
     this.cityWeather = temp;
     this.cityName = cityName;
   }
 
-  async updateWeatherData() {
+  async updateWeatherData(): Promise<void> {
     try {
       const weatherData = await fetchCurrentLocationWeather();
       this.setWeatherData(weatherData.temp, weatherData.city);
@@ -49,7 +49,10 @@ class TaskStore {
     return this.cityName;
   }
 
-  toggleTaskCompletion(id: number, callback: (completed: boolean) => void) {
+  toggleTaskCompletion(
+    id: number,
+    callback: (completed: boolean) => void
+  ): void {
     const selectedTask = this.tasks.find((task) => task.id === id);
     if (selectedTask) {
       selectedTask.completed = !selectedTask.completed;
@@ -62,7 +65,7 @@ class TaskStore {
     }
   }
 
-  deleteTask(id: number) {
+  deleteTask(id: number): void {
     this.tasks = this.tasks.filter((task) => task.id !== id);
   }
 
@@ -72,7 +75,7 @@ class TaskStore {
     priority: 'low' | 'medium' | 'high',
     category: string,
     description: string
-  ) {
+  ): void {
     const taskToEdit = this.tasks.find((task) => task.id === id);
     if (taskToEdit) {
       taskToEdit.title = title;
