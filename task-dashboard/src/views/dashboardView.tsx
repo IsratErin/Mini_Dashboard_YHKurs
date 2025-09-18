@@ -224,7 +224,7 @@ function DashboardView({
                   }`}
                 >
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-base font-bold text-gray-800 flex-1">
+                    <h3 className=" font-bold text-gray-800">
                       {task.title}
                       {editingTaskId === task.id && (
                         <span className="ml-2 text-xs text-blue-600 font-normal">
@@ -232,22 +232,22 @@ function DashboardView({
                         </span>
                       )}
                     </h3>
-                    <div className="flex items-center gap-2 ml-2">
+                    <div className="flex items-center gap-1 ml-1">
                       <input
                         type="checkbox"
                         checked={task.completed}
                         onChange={() => onToggleComplete(task.id)}
-                        className="h-4 w-4 text-blue-600"
+                        className="h-6 w-6 text-blue-600"
                       />
                       <button
                         onClick={() => onEditTask(task.id)}
-                        className="text-blue-600 hover:text-blue-800 text-xs"
+                        className="text-blue-600 hover:text-blue-800 text-[5px] p-1 leading-none"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => onDeleteTask(task.id)}
-                        className="text-red-600 hover:text-red-800 text-xs"
+                        className="text-red-600 hover:text-red-800 text-[5px] p-1 leading-none"
                       >
                         Delete
                       </button>
@@ -255,25 +255,28 @@ function DashboardView({
                   </div>
 
                   <div className="space-y-1">
-                    <div
-                      className={`inline-block px-2 py-1 rounded-full text-xs ${priorityColor[task.priority]}`}
-                    >
-                      Priority: {task.priority}
+                    <div className="flex items-center gap-4 flex-wrap">
+                      <p className="text-gray-600 text-sm">
+                        <span className="font-semibold">Priority:</span>{' '}
+                        {task.priority}
+                      </p>
+                      <p className="text-gray-600 text-sm">
+                        <span className="font-semibold">Category:</span>{' '}
+                        {task.category}
+                      </p>
+                      <p className="text-gray-600 text-sm">
+                        <span className="font-semibold">Date:</span>{' '}
+                        {task.createdAt.toLocaleString().split(',')[0]}
+                      </p>
                     </div>
-                    <p className="text-gray-600 text-sm">
-                      <span className="font-semibold">Category:</span>{' '}
-                      {task.category}
-                    </p>
+                  </div>
+                  <div className="mt-2 flex flex-col text-left">
                     {task.description && (
                       <p className="text-gray-600 text-sm">
-                        <span className="font-semibold">Description:</span>{' '}
+                        <div className="font-semibold">Description:</div>
                         {task.description}
                       </p>
                     )}
-                    <p className="text-gray-500 text-xs italic">
-                      <span className="font-semibold">Created:</span>{' '}
-                      {task.createdAt.toLocaleString()}
-                    </p>
                   </div>
                 </div>
               ))}
