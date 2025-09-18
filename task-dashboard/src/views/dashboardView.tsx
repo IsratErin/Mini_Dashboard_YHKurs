@@ -1,4 +1,7 @@
 import Task from '../model/task';
+type SortOrder = 'none' | 'highToLow' | 'lowToHigh';
+type filterStatus = 'all' | 'completed' | 'pending';
+type priority = 'low' | 'medium' | 'high';
 
 interface DashboardViewProps {
   tasks: Task[];
@@ -6,7 +9,7 @@ interface DashboardViewProps {
     title: string;
     category: string;
     completed: boolean;
-    priority: 'low' | 'medium' | 'high';
+    priority: priority;
     description: string;
   };
 
@@ -14,7 +17,7 @@ interface DashboardViewProps {
     title: string;
     category: string;
     completed: boolean;
-    priority: 'low' | 'medium' | 'high';
+    priority: priority;
     description: string;
   }) => void;
   onAddTask: () => void;
@@ -24,10 +27,10 @@ interface DashboardViewProps {
   onDeleteTask: (id: number) => void;
   onEditTask: (id: number) => void;
   editingTaskId: number | null;
-  filterStatus: 'all' | 'completed' | 'pending';
-  onFilterChange: (status: 'all' | 'completed' | 'pending') => void;
-  sortOrder: 'none' | 'highToLow' | 'lowToHigh';
-  onSortChange: (order: 'none' | 'highToLow' | 'lowToHigh') => void;
+  filterStatus: filterStatus;
+  onFilterChange: (status: filterStatus) => void;
+  sortOrder: SortOrder;
+  onSortChange: (order: SortOrder) => void;
   searchKeyword: string;
   onSearch: (keyword: string) => void;
   quote: string;
@@ -67,7 +70,7 @@ function DashboardView({
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ): void {
-    onSortChange(e.target.value as 'none' | 'highToLow' | 'lowToHigh');
+    onSortChange(e.target.value as SortOrder);
   }
 
   function doSearch(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -147,9 +150,7 @@ function DashboardView({
                 <select
                   value={filterStatus}
                   onChange={(e) =>
-                    onFilterChange(
-                      e.target.value as 'all' | 'completed' | 'pending'
-                    )
+                    onFilterChange(e.target.value as filterStatus)
                   }
                   className="px-2 py-1 border rounded bg-white text-xs"
                 >

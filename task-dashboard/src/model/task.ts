@@ -1,9 +1,10 @@
+type priority = 'low' | 'medium' | 'high';
 class Task {
   id: number;
   title: string;
   description?: string;
   completed: boolean;
-  priority: 'low' | 'medium' | 'high';
+  priority: priority;
   createdAt: Date;
   category: string;
 
@@ -11,7 +12,7 @@ class Task {
     id: number,
     title: string,
     completed: boolean,
-    priority: 'low' | 'medium' | 'high',
+    priority: priority,
     category: string,
     description?: string
   ) {

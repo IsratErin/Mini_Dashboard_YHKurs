@@ -4,6 +4,7 @@ import TaskStore from '../model/task_Store';
 
 // sort order type
 type SortOrder = 'none' | 'highToLow' | 'lowToHigh';
+type filterStatus = 'all' | 'completed' | 'pending';
 
 export function DashboardRender() {
   const [taskStore] = useState(() => new TaskStore());
@@ -18,11 +19,10 @@ export function DashboardRender() {
     priority: 'low' as 'low' | 'medium' | 'high',
     description: '',
   });
-  const [filterStatus, setFilterStatus] = useState<
-    'all' | 'completed' | 'pending'
-  >('all');
+  const [filterStatus, setFilterStatus] = useState<filterStatus>('all');
   const [sortOrder, setSortOrder] = useState<SortOrder>('none');
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [editingTask, setEditingTask] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchWeather = async (): Promise<void> => {
@@ -81,8 +81,6 @@ export function DashboardRender() {
     });
   };
 
-  const [editingTask, setEditingTask] = useState<number | null>(null);
-
   const handleEditTask = (id: number): void => {
     const taskToEdit = tasks.find((task) => task.id === id);
     if (taskToEdit) {
@@ -118,9 +116,7 @@ export function DashboardRender() {
     }
   };
 
-  const handleFilterChange = (
-    status: 'all' | 'completed' | 'pending'
-  ): void => {
+  const handleFilterChange = (status: filterStatus): void => {
     setFilterStatus(status);
   };
 
@@ -145,8 +141,8 @@ export function DashboardRender() {
     return sortedTasks;
   };
 
-  //  filtered tasks that includes sorting
-  // Update the filtered tasks to include search
+  //  filtered tasks that includes sorted tasks based on priority
+  // and task search
   const filteredAndSortedTasks = sortByPriority(
     tasks.filter((task) => {
       // First apply search filter

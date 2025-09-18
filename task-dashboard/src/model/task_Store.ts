@@ -2,6 +2,8 @@ import Task from './task';
 import { fetchCurrentLocationWeather } from '../api/weatherApiData';
 import { fetchDailyQuote } from '../api/quoteApiData';
 
+type priority = 'low' | 'medium' | 'high';
+
 class TaskStore {
   tasks: Task[] = [];
   cityWeather: number = 0;
@@ -12,7 +14,7 @@ class TaskStore {
     id: number,
     title: string,
     completed: boolean,
-    priority: 'low' | 'medium' | 'high',
+    priority: priority,
     category: string,
     description?: string
   ): void {
@@ -72,7 +74,7 @@ class TaskStore {
   editTask(
     id: number,
     title: string,
-    priority: 'low' | 'medium' | 'high',
+    priority: priority,
     category: string,
     description: string
   ): void {
