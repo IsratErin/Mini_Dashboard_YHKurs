@@ -142,15 +142,21 @@ function DashboardView({
         {/* Task List - Right Side */}
         <div className="w-full flex flex-col h-full">
           {/* Filter and Sort Controls*/}
-          
+
           <div className="bg-white rounded-lg shadow-sm p-3 mb-3 flex-shrink-0">
             <div className="flex items-center justify-between gap-4">
               {/* Filter Dropdown */}
               <div className="flex items-center gap-2">
-                <span className="text-gray-700 text-sm font-medium">Filter:</span>
+                <span className="text-gray-700 text-sm font-medium">
+                  Filter:
+                </span>
                 <select
                   value={filterStatus}
-                  onChange={(e) => onFilterChange(e.target.value as 'all' | 'completed' | 'pending')}
+                  onChange={(e) =>
+                    onFilterChange(
+                      e.target.value as 'all' | 'completed' | 'pending'
+                    )
+                  }
                   className="px-2 py-1 border rounded bg-white text-xs"
                 >
                   <option value="all">All Tasks</option>
@@ -172,10 +178,13 @@ function DashboardView({
                   <option value="lowToHigh">Low→High</option>
                 </select>
               </div>
-              
+
               {/* Search Control */}
               <div className="flex items-center gap-2">
-                <span className="text-gray-700 text-sm font-medium"></span>
+                <span className="text-gray-700 text-sm font-medium">
+                  {' '}
+                  Search:{' '}
+                </span>
                 <input
                   type="text"
                   placeholder="Search task"
@@ -183,103 +192,105 @@ function DashboardView({
                   value={searchKeyword}
                   onChange={doSearch}
                 />
-                <button
-                  onClick={() => onSearch(searchKeyword)}
+                {/*<button
+                  onClick={()=>doSearch}
                   className="px-2 py-0.5 rounded bg-gray-300  text-gray-700 text-xs hover:bg-gray-300"
                 >
                   Search
-                </button>
+                </button>*/}
               </div>
             </div>
 
             {/* Task Count */}
             <div className="text-xs text-gray-600 mt-2">
-              <div className='border border-gray-300 rounded px-2 py-0.5'> Showing {tasks.length} of {filterStatus === 'all' ? 'total' : filterStatus} tasks</div>
-              
+              <div className="border border-gray-300 rounded px-2 py-0.5">
+                {' '}
+                Showing {tasks.length} of{' '}
+                {filterStatus === 'all' ? 'total' : filterStatus} tasks
+              </div>
             </div>
           </div>
-
-
 
           {/* Task List Grid */}
           <div className="flex-1 overflow-y-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 pr-2">
-            {tasks.map((task) => (
-              <div
-                key={task.id}
-                className={`p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow ${
-                  editingTaskId === task.id 
-                    ? 'bg-blue-50 border-2 border-blue-300 ring-2 ring-blue-200' 
-                    : 'bg-white'
-                }`}
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-base font-bold text-gray-800 flex-1">
-                    {task.title}
-                    {editingTaskId === task.id && (
-                      <span className="ml-2 text-xs text-blue-600 font-normal">
-                        (Editing)
-                      </span>
-                    )}
-                  </h3>
-                  <div className="flex items-center gap-2 ml-2">
-                    <input
-                      type="checkbox"
-                      checked={task.completed}
-                      onChange={() => onToggleComplete(task.id)}
-                      className="h-4 w-4 text-blue-600"
-                    />
-                    <button
-                      onClick={() => onEditTask(task.id)}
-                      className="text-blue-600 hover:text-blue-800 text-xs"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => onDeleteTask(task.id)}
-                      className="text-red-600 hover:text-red-800 text-xs"
-                    >
-                      Delete
-                    </button>
+              {tasks.map((task) => (
+                <div
+                  key={task.id}
+                  className={`p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow ${
+                    editingTaskId === task.id
+                      ? 'bg-blue-50 border-2 border-blue-300 ring-2 ring-blue-200'
+                      : 'bg-white'
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-base font-bold text-gray-800 flex-1">
+                      {task.title}
+                      {editingTaskId === task.id && (
+                        <span className="ml-2 text-xs text-blue-600 font-normal">
+                          (Editing)
+                        </span>
+                      )}
+                    </h3>
+                    <div className="flex items-center gap-2 ml-2">
+                      <input
+                        type="checkbox"
+                        checked={task.completed}
+                        onChange={() => onToggleComplete(task.id)}
+                        className="h-4 w-4 text-blue-600"
+                      />
+                      <button
+                        onClick={() => onEditTask(task.id)}
+                        className="text-blue-600 hover:text-blue-800 text-xs"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => onDeleteTask(task.id)}
+                        className="text-red-600 hover:text-red-800 text-xs"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
-                </div>
-                
-                <div className="space-y-1">
-                  <div
-                    className={`inline-block px-2 py-1 rounded-full text-xs ${priorityColor[task.priority]}`}
-                  >
-                    Priority: {task.priority}
-                  </div>
-                  <p className="text-gray-600 text-sm">
-                    <span className="font-semibold">Category:</span> {task.category}
-                  </p>
-                  {task.description && (
+
+                  <div className="space-y-1">
+                    <div
+                      className={`inline-block px-2 py-1 rounded-full text-xs ${priorityColor[task.priority]}`}
+                    >
+                      Priority: {task.priority}
+                    </div>
                     <p className="text-gray-600 text-sm">
-                      <span className="font-semibold">Description:</span>{' '}
-                      {task.description}
+                      <span className="font-semibold">Category:</span>{' '}
+                      {task.category}
                     </p>
-                  )}
-                  <p className="text-gray-500 text-xs italic">
-                    <span className="font-semibold">Created:</span>{' '}
-                    {task.createdAt.toLocaleString()}
-                  </p>
+                    {task.description && (
+                      <p className="text-gray-600 text-sm">
+                        <span className="font-semibold">Description:</span>{' '}
+                        {task.description}
+                      </p>
+                    )}
+                    <p className="text-gray-500 text-xs italic">
+                      <span className="font-semibold">Created:</span>{' '}
+                      {task.createdAt.toLocaleString()}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Weather Display - Bottom Left Corner */}
+        <div className="fixed bottom-4 left-4">
+          <div className="bg-white rounded-lg shadow-md p-2">
+            <span className="font-semibold text-sm">
+              Temperature: {temperature}°C in{' '}
+              <span className="text-red-600">{location}</span>{' '}
+            </span>
           </div>
         </div>
       </div>
-
-      {/* Weather Display - Bottom Left Corner */}
-      <div className="fixed bottom-4 left-4">
-        <div className="bg-white rounded-lg shadow-md p-2">
-          <span className="font-semibold text-sm">
-            Temperature: {temperature}°C in <span className="text-red-600">{location}</span>{' '}
-            
-          </span>
-        </div>
-      </div>
-    </div>
     </div>
   );
 }
